@@ -10,14 +10,58 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "CapgoAlarmPlugin"
     public let jsName = "CapgoAlarm"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "createAlarm", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "openAlarms", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getOSInfo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = CapgoAlarm()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
+    @objc func createAlarm(_ call: CAPPluginCall) {
+        let hour = call.getInt("hour") ?? -1
+        let minute = call.getInt("minute") ?? -1
+        if hour < 0 || minute < 0 { call.reject("hour and minute are required"); return }
+        let label = call.getString("label")
+
+        AlarmKitBridge.createAlarm(hour: hour, minute: minute, label: label) { success, message in
+            call.resolve(["success": success, "message": message ?? NSNull()])
+        }
+    }
+
+    @objc func openAlarms(_ call: CAPPluginCall) {
+        AlarmKitBridge.openAlarms { success, message in
+            call.resolve(["success": success, "message": message ?? NSNull()])
+        }
+    }
+
+    @objc func getOSInfo(_ call: CAPPluginCall) {
+        let version = UIDevice.current.systemVersion
+        let supportsNative = AlarmKitBridge.isAvailable()
         call.resolve([
-            "value": implementation.echo(value)
+            "platform": "ios",
+            "version": version,
+            "supportsNativeAlarms": supportsNative,
+            "supportsScheduledNotifications": true
         ])
     }
+
+    // Capacitor permission lifecycle
+    public override func checkPermissions(_ call: CAPPluginCall) {
+        // No explicit runtime permission needed for AlarmKit; always granted when available
+        call.resolve(["granted": true])
+    }
+
+    public override func requestPermissions(_ call: CAPPluginCall) {
+        // Request AlarmKit authorization when available
+        if !AlarmKitBridge.isAvailable() {
+            call.resolve(["granted": false])
+            return
+        }
+        AlarmKitBridge.requestAuthorization { granted, message in
+            var result: [String: Any] = ["granted": granted]
+            if let message = message { result["message"] = message }
+            call.resolve(result)
+        }
+    }
+
+    // No data conversion helpers needed for native-only operations
 }

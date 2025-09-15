@@ -1,10 +1,32 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { CapgoAlarmPlugin } from './definitions';
+import type {
+  CapgoAlarmPlugin,
+  NativeAlarmCreateOptions,
+  NativeActionResult,
+  OSInfo,
+  PermissionResult,
+} from './definitions';
 
 export class CapgoAlarmWeb extends WebPlugin implements CapgoAlarmPlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
+  async createAlarm(_options: NativeAlarmCreateOptions): Promise<NativeActionResult> {
+    return { success: false, message: 'Native alarm not supported on web' };
+  }
+
+  async openAlarms(): Promise<NativeActionResult> {
+    return { success: false, message: 'Native alarm UI not available on web' };
+  }
+
+  async getOSInfo(): Promise<OSInfo> {
+    return {
+      platform: 'web',
+      version: navigator.userAgent,
+      supportsNativeAlarms: false,
+      supportsScheduledNotifications: false,
+    };
+  }
+
+  async requestPermissions(_options?: { exactAlarm?: boolean }): Promise<PermissionResult> {
+    return { granted: true };
   }
 }
