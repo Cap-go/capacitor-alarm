@@ -17,7 +17,7 @@ npx cap sync
 
 ## Requirements
 
-- iOS: iOS 26+ only. This plugin relies on AlarmKit APIs and will report unsupported on earlier versions or when the framework is unavailable.
+- iOS: iOS 26+ only. This plugin relies on `AlarmKit` APIs and will report unsupported on earlier versions or when the framework is unavailable.
 - Android: Uses `AlarmClock` intents; behavior depends on the default Clock app and OEM policies.
 
 Note: This plugin only exposes native alarm actions (create/open). It does not implement any custom in-app alarm scheduling/CRUD.
@@ -154,6 +154,8 @@ Result of a permissions request.
 
 Construct a type with a set of properties K of type T
 
-<code>{ [P in K]: T; }</code>
+<code>{
+ [P in K]: T;
+ }</code>
 
 </docgen-api>
