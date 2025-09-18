@@ -42,7 +42,7 @@ export interface PermissionResult {
 export interface CapgoAlarmPlugin {
   /**
    * Create a native OS alarm using the platform clock app.
-   * On Android this uses the Alarm Clock intent; on iOS this is not supported.
+   * On Android this uses the Alarm Clock intent; on iOS this use AlarmKit if available (iOS 26+).
    */
   createAlarm(options: NativeAlarmCreateOptions): Promise<NativeActionResult>;
 
