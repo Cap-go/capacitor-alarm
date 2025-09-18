@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [7.1.4](https://github.com/Cap-go/capacitor-alarm/compare/7.1.3...7.1.4) (2025-09-18)
+
+
+### Bug Fixes
+
+* update documentation for createAlarm to clarify iOS support with AlarmKit ([17c1456](https://github.com/Cap-go/capacitor-alarm/commit/17c1456163dab77f2c666fa41097dd95616242a6))
+
 ## [7.1.3](https://github.com/Cap-go/capacitor-alarm/compare/7.1.2...7.1.3) (2025-09-18)
 
 ## [7.1.2](https://github.com/Cap-go/capacitor-alarm/compare/7.1.1...7.1.2) (2025-09-18)
