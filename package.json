@@ -1,6 +1,6 @@
 {
   "name": "@capgo/capacitor-alarm",
-  "version": "7.1.7",
+  "version": "7.1.8",
   "description": "Manage native alarm Capacitor plugin",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
