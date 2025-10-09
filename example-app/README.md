@@ -1,12 +1,19 @@
-## Created with Capacitor Create App
+# Example App for `@capgo/capacitor-alarm`
 
-This app was created using [`@capacitor/create-app`](https://github.com/ionic-team/create-capacitor-app),
-and comes with a very minimal shell for building an app.
+This Vite project links directly to the local plugin source so you can exercise the native APIs while developing.
 
-### Running this example
+## Actions in this playground
 
-To run the provided example, you can use `npm start` command.
+- **Get OS info** – Calls getOSInfo() to discover the current platform capabilities.
+- **Request permissions** – Requests alarm-related permissions on supported platforms.
+- **Create alarm** – Attempts to schedule a native alarm. Works on platforms that expose alarm APIs.
+- **Open system alarm list** – Requests the system alarm list if the platform supports it.
+
+## Getting started
 
 ```bash
+npm install
 npm start
 ```
+
+Add native shells with `npx cap add ios` or `npx cap add android` from this folder to try behaviour on device or simulator.
