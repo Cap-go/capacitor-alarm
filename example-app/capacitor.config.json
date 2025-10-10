@@ -1,6 +1,6 @@
 {
-  "appId": "com.example.capgo.capacitor.alarm",
-  "appName": "@capgo/capacitor-alarm example",
+  "appId": "app.capgo.alarm",
+  "appName": "Alarm Example",
   "webDir": "dist",
   "plugins": {
     "SplashScreen": {
