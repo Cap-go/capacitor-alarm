@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.example.plugin"
+    namespace "app.capgo.alarm"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "app.capgo.alarm"

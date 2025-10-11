@@ -1,4 +1,4 @@
-package com.example.plugin;
+package app.capgo.alarm;
 
 import com.getcapacitor.BridgeActivity;
 
