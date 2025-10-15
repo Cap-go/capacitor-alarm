@@ -557,7 +557,7 @@
 
     "prettier": ["prettier@3.6.2", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ=="],
 
-    "prettier-plugin-java": ["prettier-plugin-java@2.7.5", "", { "dependencies": { "java-parser": "3.0.1" }, "peerDependencies": { "prettier": "^3.0.0" } }, "sha512-LH5PKX+cjKOcjnnLXn3/cT8u7vxXxm68r5zsBPI3QQfkfyA/Sx8TTnhbwZdqwQXca431RquBG2ZtmyqmBwBKEw=="],
+    "prettier-plugin-java": ["prettier-plugin-java@2.7.6", "", { "dependencies": { "java-parser": "3.0.1" }, "peerDependencies": { "prettier": "^3.0.0" } }, "sha512-Vn9bgxTxsBFWE5GzxzUSz+gu1yrCAxhFW7OFeEFFk2ciEHtWyOwtsETg/Ymvy5AFWPAxEkf8gzwuXhhTfkrMeg=="],
 
     "punycode": ["punycode@2.3.1", "", {}, "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg=="],
 

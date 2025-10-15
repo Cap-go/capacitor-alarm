@@ -6,15 +6,15 @@ import AlarmKit
 
 class AlarmKitBridge {
     static func isAvailable() -> Bool {
-#if canImport(AlarmKit)
+        #if canImport(AlarmKit)
         if #available(iOS 26.0, *) { return true } else { return false }
-#else
+        #else
         return false
-#endif
+        #endif
     }
 
     static func requestAuthorization(completion: @escaping (Bool, String?) -> Void) {
-#if canImport(AlarmKit)
+        #if canImport(AlarmKit)
         if #available(iOS 26.0, *) {
             Task {
                 do {
@@ -28,19 +28,19 @@ class AlarmKitBridge {
             }
             return
         }
-#endif
+        #endif
         completion(false, "AlarmKit not available on this device/SDK")
     }
 
     static func createAlarm(hour: Int, minute: Int, label: String?, completion: @escaping (Bool, String?) -> Void) {
-#if canImport(AlarmKit)
+        #if canImport(AlarmKit)
         if #available(iOS 26.0, *) {
             // TODO: Replace with real AlarmKit calls.
             // We intentionally avoid guessing API surface to prevent compilation/runtime issues.
             completion(false, "AlarmKit integrated but no concrete API wired. Provide exact AlarmKit API usage.")
             return
         }
-#endif
+        #endif
         completion(false, "AlarmKit not available on this device/SDK")
     }
 
