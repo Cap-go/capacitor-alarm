@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [7.1.20](https://github.com/Cap-go/capacitor-alarm/compare/7.1.19...7.1.20) (2025-10-23)
+
+
+### Bug Fixes
+
+* discord release ([872b476](https://github.com/Cap-go/capacitor-alarm/commit/872b476ac4fb13d4d966c314284dd00598d6143b))
+
 ## [7.1.19](https://github.com/Cap-go/capacitor-alarm/compare/7.1.18...7.1.19) (2025-10-23)
 
 
