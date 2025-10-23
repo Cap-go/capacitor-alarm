@@ -30,6 +30,7 @@ Note: This plugin only exposes native alarm actions (create/open). It does not i
 * [`openAlarms()`](#openalarms)
 * [`getOSInfo()`](#getosinfo)
 * [`requestPermissions(...)`](#requestpermissions)
+* [`getPluginVersion()`](#getpluginversion)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -96,6 +97,19 @@ On Android, may route to settings for exact alarms.
 | **`options`** | <code>{ exactAlarm?: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;<a href="#permissionresult">PermissionResult</a>&gt;</code>
+
+--------------------
+
+
+### getPluginVersion()
+
+```typescript
+getPluginVersion() => Promise<{ version: string; }>
+```
+
+Get the native Capacitor plugin version
+
+**Returns:** <code>Promise&lt;{ version: string; }&gt;</code>
 
 --------------------
 
