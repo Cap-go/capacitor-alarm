@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [7.2.2](https://github.com/Cap-go/capacitor-alarm/compare/7.2.1...7.2.2) (2025-10-23)
+
+
+### Bug Fixes
+
+* lint issue ([b16488d](https://github.com/Cap-go/capacitor-alarm/commit/b16488d1f59cc5bf3d606bf149ff2cba4bedb905))
+
 ## [7.2.1](https://github.com/Cap-go/capacitor-alarm/compare/7.2.0...7.2.1) (2025-10-23)
 
 
