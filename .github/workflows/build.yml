@@ -87,6 +87,29 @@ jobs:
       - name: Build
         id: build_code
         run: bun run build
+      - name: Extract changelog for current version
+        id: changelog
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+          # Extract changelog section for this version
+          awk -v ver="$VERSION" '
+            /^## \[/ {
+              if (found) exit;
+              if (index($0, ver)) found=1;
+            }
+            found {
+              if (/^## \[/ && !first) exit;
+              first=1;
+              print;
+            }
+          ' CHANGELOG.md > release-notes.md
+
+          # If release notes are empty, use a fallback
+          if [ ! -s release-notes.md ]; then
+            echo "Changes in version $VERSION" > release-notes.md
+          fi
       - uses: js-devtools/npm-publish@v4
         if: ${{ !contains(github.ref, '-alpha.') }}
         with:
@@ -102,7 +125,7 @@ jobs:
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
+          body_path: release-notes.md
           make_latest: true
           token: '${{ secrets.PERSONAL_ACCESS_TOKEN }}'
           prerelease: ${{ contains(github.ref, '-alpha.') }}
