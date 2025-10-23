@@ -39,6 +39,8 @@ Note: This plugin only exposes native alarm actions (create/open). It does not i
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
+Capacitor Alarm Plugin interface for managing native OS alarms.
+
 ### createAlarm(...)
 
 ```typescript
@@ -46,13 +48,15 @@ createAlarm(options: NativeAlarmCreateOptions) => Promise<NativeActionResult>
 ```
 
 Create a native OS alarm using the platform clock app.
-On Android this uses the Alarm Clock intent; on iOS this use AlarmKit if available (iOS 26+).
+On Android this uses the Alarm Clock intent; on iOS this uses AlarmKit if available (iOS 16+).
 
-| Param         | Type                                                                          |
-| ------------- | ----------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#nativealarmcreateoptions">NativeAlarmCreateOptions</a></code> |
+| Param         | Type                                                                          | Description                      |
+| ------------- | ----------------------------------------------------------------------------- | -------------------------------- |
+| **`options`** | <code><a href="#nativealarmcreateoptions">NativeAlarmCreateOptions</a></code> | - Options for creating the alarm |
 
 **Returns:** <code>Promise&lt;<a href="#nativeactionresult">NativeActionResult</a>&gt;</code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -67,6 +71,8 @@ Open the platform's native alarm list UI, if available.
 
 **Returns:** <code>Promise&lt;<a href="#nativeactionresult">NativeActionResult</a>&gt;</code>
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -80,6 +86,8 @@ Get information about the OS and capabilities.
 
 **Returns:** <code>Promise&lt;<a href="#osinfo">OSInfo</a>&gt;</code>
 
+**Since:** 1.0.0
+
 --------------------
 
 
@@ -92,11 +100,13 @@ requestPermissions(options?: { exactAlarm?: boolean | undefined; } | undefined) 
 Request relevant permissions for alarm usage on the platform.
 On Android, may route to settings for exact alarms.
 
-| Param         | Type                                   |
-| ------------- | -------------------------------------- |
-| **`options`** | <code>{ exactAlarm?: boolean; }</code> |
+| Param         | Type                                   | Description                                      |
+| ------------- | -------------------------------------- | ------------------------------------------------ |
+| **`options`** | <code>{ exactAlarm?: boolean; }</code> | - Optional parameters for the permission request |
 
 **Returns:** <code>Promise&lt;<a href="#permissionresult">PermissionResult</a>&gt;</code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -107,9 +117,11 @@ On Android, may route to settings for exact alarms.
 getPluginVersion() => Promise<{ version: string; }>
 ```
 
-Get the native Capacitor plugin version
+Get the native Capacitor plugin version.
 
 **Returns:** <code>Promise&lt;{ version: string; }&gt;</code>
+
+**Since:** 1.0.0
 
 --------------------
 
@@ -119,10 +131,12 @@ Get the native Capacitor plugin version
 
 #### NativeActionResult
 
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`success`** | <code>boolean</code> |
-| **`message`** | <code>string</code>  |
+Result of a native action.
+
+| Prop          | Type                 | Description                                  |
+| ------------- | -------------------- | -------------------------------------------- |
+| **`success`** | <code>boolean</code> | Whether the action was successful            |
+| **`message`** | <code>string</code>  | Optional message with additional information |
 
 
 #### NativeAlarmCreateOptions
@@ -144,7 +158,7 @@ Returned info about current OS and capabilities.
 
 | Prop                                 | Type                 | Description                                                 |
 | ------------------------------------ | -------------------- | ----------------------------------------------------------- |
-| **`platform`**                       | <code>string</code>  | 'ios' \| 'android' \| 'web'                                 |
+| **`platform`**                       | <code>string</code>  | Platform identifier: 'ios' \| 'android' \| 'web'            |
 | **`version`**                        | <code>string</code>  | OS version string                                           |
 | **`supportsNativeAlarms`**           | <code>boolean</code> | Whether the platform exposes a native alarm app integration |
 | **`supportsScheduledNotifications`** | <code>boolean</code> | Whether scheduling local notifications is supported         |
