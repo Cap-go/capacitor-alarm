@@ -1,0 +1,31 @@
+name: Monitor GitHub Repo
+
+on:
+  schedule:
+    - cron: "0 * * * *" # Runs every hour
+  workflow_dispatch: # Optional
+
+jobs:
+  run-notifier:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task: [monitor-issues, monitor-prs]
+    steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Monitor ${{ matrix.task }}
+        uses: shubhaamgupta11/repo-monitor@v1.0.4
+        with:
+          # required inputs
+          task: "${{ matrix.task }}"
+          git_secret: "${{ secrets.PERSONAL_ACCESS_TOKEN }}"
+          notifier: "discord"
+          fetch_data_interval: 1  # Hours (must align with your cron schedule)
+          # repo inputs
+          repo_owner: "${{ github.repository_owner }}"
+          repo_name: "${{ replace(github.repository, format('{0}/', github.repository_owner), '') }}"
+          # Discord-specific inputs
+          discord_webhook_url: "${{ secrets.DISCORD_ISSUE_WEBHOOK_URL }}"
