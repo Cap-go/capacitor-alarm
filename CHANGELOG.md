@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [7.3.3](https://github.com/Cap-go/capacitor-alarm/compare/7.3.2...7.3.3) (2025-10-23)
+
+
+### Bug Fixes
+
+* remove footer in discord ([c7270fe](https://github.com/Cap-go/capacitor-alarm/commit/c7270fe5c0c703e3758a1b426d1b3cb54450dcb9))
+* update Discord webhook username to include repository name ([08b2fbf](https://github.com/Cap-go/capacitor-alarm/commit/08b2fbfeb62c3a1692f6289f74ad4c3ad2d714bb))
+
 ## [7.3.2](https://github.com/Cap-go/capacitor-alarm/compare/7.3.1...7.3.2) (2025-10-23)
 
 
