@@ -31,6 +31,6 @@ export class CapgoAlarmWeb extends WebPlugin implements CapgoAlarmPlugin {
   }
 
   async getPluginVersion(): Promise<{ version: string }> {
-    return { version: "web" };
+    return { version: 'web' };
   }
 }
