@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [7.3.2](https://github.com/Cap-go/capacitor-alarm/compare/7.3.1...7.3.2) (2025-10-23)
+
+
+### Bug Fixes
+
+* remove content field from Discord webhook ([4369083](https://github.com/Cap-go/capacitor-alarm/commit/4369083262ae3a797e3bb0620bdb651644da23eb))
+
 ## [7.3.1](https://github.com/Cap-go/capacitor-alarm/compare/7.2.9...7.3.1) (2025-10-23)
 
 
