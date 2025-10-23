@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## 7.3.0 (2025-10-23)
+
+
+### Features
+
+* add getPluginVersion ([ba53bf1](https://github.com/Cap-go/capacitor-alarm/commit/ba53bf11a1652865994a6c606327f02dba3fcd7d))
+* implement native alarm functionality for iOS and Android, update README and definitions ([ba5fa99](https://github.com/Cap-go/capacitor-alarm/commit/ba5fa99e85233a35af2018c11f825f2803b222d5))
+
+
+### Bug Fixes
+
+* add missing implementation ([83d91a4](https://github.com/Cap-go/capacitor-alarm/commit/83d91a4deb92a7bf7746771442b4ec90f3c1afe2))
+* add release to discord and issue to discord ([bfb5d23](https://github.com/Cap-go/capacitor-alarm/commit/bfb5d23053f2eac37ccab5b1427dfb4c45f45f18))
+* build with tags ([8dc98f6](https://github.com/Cap-go/capacitor-alarm/commit/8dc98f6022cf0e35c00cc35ca95cd54fd7bfa9a2))
+* bump style ([5611216](https://github.com/Cap-go/capacitor-alarm/commit/56112168a610d7830c84589a637f42fd9a76dd01))
+* deploy ([2f52b01](https://github.com/Cap-go/capacitor-alarm/commit/2f52b01c395a1f6e1de93fa98cb1dcb405ae08b6))
+* discord release ([872b476](https://github.com/Cap-go/capacitor-alarm/commit/872b476ac4fb13d4d966c314284dd00598d6143b))
+* issue ([ccb87ee](https://github.com/Cap-go/capacitor-alarm/commit/ccb87ee882d0fdbe440c11bfe29b873f82556d7f))
+* lint ([6e6f298](https://github.com/Cap-go/capacitor-alarm/commit/6e6f2982145a01529421ff415f9f38e9ddbc5c12))
+* lint config ([b076aad](https://github.com/Cap-go/capacitor-alarm/commit/b076aad02829ac6b25014f4154525bf36c3cf839))
+* lint issue ([b16488d](https://github.com/Cap-go/capacitor-alarm/commit/b16488d1f59cc5bf3d606bf149ff2cba4bedb905))
+* lock and lint ([2a0f185](https://github.com/Cap-go/capacitor-alarm/commit/2a0f18551b7244ee09626edff099a6457479598f))
+* missing web implementation ([5363454](https://github.com/Cap-go/capacitor-alarm/commit/5363454c9faca43a31c08d6151fb6827de30028c))
+* name ([1bb6d43](https://github.com/Cap-go/capacitor-alarm/commit/1bb6d43fc20cc2d809ba896151ef58fdf4951917))
+* name ([f7991f6](https://github.com/Cap-go/capacitor-alarm/commit/f7991f65d71ff2f4dcbfb637b7e864bc91a7662a))
+* name ([933df05](https://github.com/Cap-go/capacitor-alarm/commit/933df052208619b841e0eba5054de0b635a61e6e))
+* release ([0fdb2c3](https://github.com/Cap-go/capacitor-alarm/commit/0fdb2c34aefb29d25c4dd856853ac76ded16b341))
+* release note ([603460a](https://github.com/Cap-go/capacitor-alarm/commit/603460a9690b0a6437c6d2345e4b51a950c0dfe8))
+* remove tag ([c1887a3](https://github.com/Cap-go/capacitor-alarm/commit/c1887a3079d7339ccd0e01e602b988bb82d46483))
+* remove useless + try better tagging ([e6810f5](https://github.com/Cap-go/capacitor-alarm/commit/e6810f5452c19b7126a4c779c40ae301801f858d))
+* renovate ([2c2b9f7](https://github.com/Cap-go/capacitor-alarm/commit/2c2b9f75a78cfca197e4d6edccef9a13a7239eca))
+* update documentation for createAlarm to clarify iOS support with AlarmKit ([17c1456](https://github.com/Cap-go/capacitor-alarm/commit/17c1456163dab77f2c666fa41097dd95616242a6))
+* use AI to make changelog ([b1f54b5](https://github.com/Cap-go/capacitor-alarm/commit/b1f54b5147f077d7e0dde01078de7cb5bacd0185))
+* web lint ([25d950f](https://github.com/Cap-go/capacitor-alarm/commit/25d950f9152a764f3872dd03f493c1b8d6ed83b0))
+
 ## [7.2.9](https://github.com/Cap-go/capacitor-alarm/compare/7.2.8...7.2.9) (2025-10-23)
 
 
