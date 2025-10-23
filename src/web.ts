@@ -29,4 +29,8 @@ export class CapgoAlarmWeb extends WebPlugin implements CapgoAlarmPlugin {
   async requestPermissions(_options?: { exactAlarm?: boolean }): Promise<PermissionResult> {
     return { granted: true };
   }
+
+  async getPluginVersion(): Promise<{ version: string }> {
+    return { version: "web" };
+  }
 }
