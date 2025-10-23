@@ -13,6 +13,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "CapgoAlarm")
 public class CapgoAlarmPlugin extends Plugin {
+    private final String PLUGIN_VERSION = "";
 
     // ===== Native OS Alarm helpers (Android) =====
     @PluginMethod
@@ -104,4 +105,17 @@ public class CapgoAlarmPlugin extends Plugin {
         ret.put("granted", true);
         call.resolve(ret);
     }
+
+
+    @PluginMethod
+    public void getPluginVersion(final PluginCall call) {
+        try {
+            final JSObject ret = new JSObject();
+            ret.put("version", this.PLUGIN_VERSION);
+            call.resolve(ret);
+        } catch (final Exception e) {
+            call.reject("Could not get plugin version", e);
+        }
+    }
+
 }

@@ -7,13 +7,15 @@ import Capacitor
  */
 @objc(CapgoAlarmPlugin)
 public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
+    private let PLUGIN_VERSION: String = ""
     public let identifier = "CapgoAlarmPlugin"
     public let jsName = "CapgoAlarm"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "createAlarm", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "openAlarms", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getOSInfo", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getPluginVersion", returnType: CAPPluginReturnPromise),
     ]
 
     @objc func createAlarm(_ call: CAPPluginCall) {
@@ -64,4 +66,10 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     // No data conversion helpers needed for native-only operations
+
+
+    @objc func getPluginVersion(_ call: CAPPluginCall) {
+        call.resolve(["version": self.PLUGIN_VERSION])
+    }
+
 }
