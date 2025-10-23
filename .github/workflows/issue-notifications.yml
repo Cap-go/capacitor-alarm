@@ -1,4 +1,4 @@
-name: Monitor GitHub Repo
+name: Notify Discord on Issue and PR
 
 on:
   schedule:
