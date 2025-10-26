@@ -8,6 +8,10 @@
 
 Manage native alarm Capacitor plugin
 
+## Documentation
+
+The most complete doc is available here: https://capgo.app/docs/plugins/alarm/
+
 ## Install
 
 ```bash
