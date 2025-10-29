@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [7.3.8](https://github.com/Cap-go/capacitor-alarm/compare/7.3.7...7.3.8) (2025-10-29)
+
+
+### Bug Fixes
+
+* CI/CD config ([0a44791](https://github.com/Cap-go/capacitor-alarm/commit/0a4479150bbff665020c45fdf3f097c2b1f00ac2))
+* update AI model in build workflow ([07066d8](https://github.com/Cap-go/capacitor-alarm/commit/07066d8b8282a0c33b17ee406f98e62b84f34c57))
+* update github action ([0d994d6](https://github.com/Cap-go/capacitor-alarm/commit/0d994d6e93cc0bb695e0ef46e9ff665711da356b))
+
 ## [7.3.7](https://github.com/Cap-go/capacitor-alarm/compare/7.3.6...7.3.7) (2025-10-27)
 
 
