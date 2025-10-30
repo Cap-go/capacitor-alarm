@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [7.3.10](https://github.com/Cap-go/capacitor-alarm/compare/7.3.9...7.3.10) (2025-10-30)
+
 ## [7.3.9](https://github.com/Cap-go/capacitor-alarm/compare/7.3.8...7.3.9) (2025-10-30)
 
 
