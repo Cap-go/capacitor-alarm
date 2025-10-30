@@ -8,6 +8,17 @@
 
 Manage native alarm Capacitor plugin
 
+## Why Capacitor Alarm?
+
+The only plugin implementing the **latest native alarm APIs** for both iOS and Android:
+
+- **iOS 26+ AlarmKit** - Full integration with Apple's new alarm framework
+- **Android AlarmClock intents** - Modern alarm management following OEM policies
+- **Future-proof** - Built on the newest platform APIs, not deprecated methods
+- **Cross-platform** - Consistent API across iOS and Android
+
+Essential for alarm clock apps, reminder apps, medication trackers, and any app needing native system alarms.
+
 ## Documentation
 
 The most complete doc is available here: https://capgo.app/docs/plugins/alarm/
@@ -186,6 +197,8 @@ Result of a permissions request.
 
 Construct a type with a set of properties K of type T
 
-<code>{ [P in K]: T; }</code>
+<code>{
+ [P in K]: T;
+ }</code>
 
 </docgen-api>
