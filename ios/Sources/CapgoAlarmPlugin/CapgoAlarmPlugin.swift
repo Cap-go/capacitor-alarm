@@ -7,7 +7,7 @@ import Capacitor
  */
 @objc(CapgoAlarmPlugin)
 public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
-    private let PLUGIN_VERSION: String = "7.3.8"
+    private let pluginVersion: String = "7.3.8"
     public let identifier = "CapgoAlarmPlugin"
     public let jsName = "CapgoAlarm"
     public let pluginMethods: [CAPPluginMethod] = [
@@ -68,7 +68,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
     // No data conversion helpers needed for native-only operations
 
     @objc func getPluginVersion(_ call: CAPPluginCall) {
-        call.resolve(["version": self.PLUGIN_VERSION])
+        call.resolve(["version": self.pluginVersion])
     }
 
 }
