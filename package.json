@@ -24,6 +24,7 @@
   "bugs": {
     "url": "https://github.com/Cap-go/capacitor-alarm/issues"
   },
+  "homepage": "https://capgo.app/docs/plugins/alarm/",
   "keywords": [
     "capacitor",
     "plugin",
