@@ -108,6 +108,27 @@ public class CapgoAlarmPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void checkPermissions(PluginCall call) {
+        JSObject ret = new JSObject();
+        JSObject details = new JSObject();
+        boolean granted = true;
+        boolean hasDetails = false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager am = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+            boolean canExact = am != null && am.canScheduleExactAlarms();
+            details.put("exactAlarm", canExact);
+            hasDetails = true;
+        }
+
+        ret.put("granted", granted);
+        if (hasDetails) {
+            ret.put("details", details);
+        }
+        call.resolve(ret);
+    }
+
+    @PluginMethod
     public void getPluginVersion(final PluginCall call) {
         try {
             final JSObject ret = new JSObject();

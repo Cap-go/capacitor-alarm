@@ -14,6 +14,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "createAlarm", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "openAlarms", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getOSInfo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getPluginVersion", returnType: CAPPluginReturnPromise)
     ]
@@ -48,8 +49,15 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
 
     // Capacitor permission lifecycle
     override public func checkPermissions(_ call: CAPPluginCall) {
-        // No explicit runtime permission needed for AlarmKit; always granted when available
-        call.resolve(["granted": true])
+        let isAlarmKitAvailable = AlarmKitBridge.isAvailable()
+        var result: [String: Any] = [
+            "granted": isAlarmKitAvailable,
+            "details": ["alarmKit": isAlarmKitAvailable]
+        ]
+        if !isAlarmKitAvailable {
+            result["message"] = "AlarmKit not available on this device/SDK"
+        }
+        call.resolve(result)
     }
 
     override public func requestPermissions(_ call: CAPPluginCall) {

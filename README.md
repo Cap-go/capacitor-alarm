@@ -37,6 +37,12 @@ npx cap sync
 
 Note: This plugin only exposes native alarm actions (create/open). It does not implement any custom in-app alarm scheduling/CRUD.
 
+## Permission checks
+
+Use `CapgoAlarm.checkPermissions()` to query whether AlarmKit (iOS) or the platform clock integration (Android) is ready before prompting users. The method never opens system UI and returns a `PermissionResult` with `details` describing platform-specific states (for example, `{ alarmKit: true }` on iOS or `{ exactAlarm: false }` on Android 12+).
+
+If your native runtime ships an older build of this plugin that predates the `checkPermissions` bridge, the JavaScript shim resolves with `{ granted: false, message: 'CapgoAlarm.checkPermissions is not implemented...' }` so you can gracefully fall back to feature detection or request an update.
+
 ## API
 
 <docgen-index>
@@ -45,6 +51,7 @@ Note: This plugin only exposes native alarm actions (create/open). It does not i
 * [`openAlarms()`](#openalarms)
 * [`getOSInfo()`](#getosinfo)
 * [`requestPermissions(...)`](#requestpermissions)
+* [`checkPermissions()`](#checkpermissions)
 * [`getPluginVersion()`](#getpluginversion)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -126,6 +133,22 @@ On Android, may route to settings for exact alarms.
 --------------------
 
 
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionResult>
+```
+
+Check the current permission state for native alarm access without triggering UI.
+On iOS this reports AlarmKit readiness; on Android it reports capability details.
+
+**Returns:** <code>Promise&lt;<a href="#permissionresult">PermissionResult</a>&gt;</code>
+
+**Since:** 8.0.4
+
+--------------------
+
+
 ### getPluginVersion()
 
 ```typescript
@@ -188,6 +211,7 @@ Result of a permissions request.
 | ------------- | ---------------------------------------------------------------- | ---------------------------------- |
 | **`granted`** | <code>boolean</code>                                             | Overall grant for requested scope  |
 | **`details`** | <code><a href="#record">Record</a>&lt;string, boolean&gt;</code> | Optional details by permission key |
+| **`message`** | <code>string</code>                                              | Optional human readable diagnostic |
 
 
 ### Type Aliases
