@@ -49,15 +49,25 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
 
     // Capacitor permission lifecycle
     override public func checkPermissions(_ call: CAPPluginCall) {
-        let isAlarmKitAvailable = AlarmKitBridge.isAvailable()
-        var result: [String: Any] = [
-            "granted": isAlarmKitAvailable,
-            "details": ["alarmKit": isAlarmKitAvailable]
-        ]
-        if !isAlarmKitAvailable {
-            result["message"] = "AlarmKit not available on this device/SDK"
+        guard AlarmKitBridge.isAvailable() else {
+            call.resolve([
+                "granted": false,
+                "details": ["alarmKit": false],
+                "message": "AlarmKit not available on this device/SDK"
+            ])
+            return
         }
-        call.resolve(result)
+
+        AlarmKitBridge.currentAuthorizationStatus { granted, statusDescription in
+            var result: [String: Any] = [
+                "granted": granted,
+                "details": ["alarmKit": granted]
+            ]
+            if !granted, let statusDescription = statusDescription {
+                result["message"] = "AlarmKit authorization status: \(statusDescription)"
+            }
+            call.resolve(result)
+        }
     }
 
     override public func requestPermissions(_ call: CAPPluginCall) {

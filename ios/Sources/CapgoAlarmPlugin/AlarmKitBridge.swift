@@ -42,6 +42,23 @@ class AlarmKitBridge {
         completion(false, "AlarmKit not available on this device/SDK")
     }
 
+    static func currentAuthorizationStatus(completion: @escaping (Bool, String?) -> Void) {
+        #if canImport(AlarmKit)
+        if #available(iOS 26.0, *) {
+            Task {
+                do {
+                    let status = try await AlarmManager.shared.requestAuthorization()
+                    completion(status == .authorized, String(describing: status))
+                } catch {
+                    completion(false, "Authorization error: \(error.localizedDescription)")
+                }
+            }
+            return
+        }
+        #endif
+        completion(false, "AlarmKit not available on this device/SDK")
+    }
+
     static func createAlarm(hour: Int, minute: Int, label: String?, completion: @escaping (Bool, String?) -> Void) {
         #if canImport(AlarmKit)
         if #available(iOS 26.0, *) {
@@ -138,6 +155,7 @@ private extension AlarmKitBridge {
 
 }
 #endif
+
 
 #if canImport(UIKit)
 private extension AlarmKitBridge {
