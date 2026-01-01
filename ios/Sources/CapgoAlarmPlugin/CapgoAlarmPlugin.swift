@@ -1,10 +1,8 @@
-import Foundation
 import Capacitor
+import Foundation
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
+/// Please read the Capacitor iOS Plugin Development Guide
+/// here: https://capacitorjs.com/docs/plugins/ios
 @objc(CapgoAlarmPlugin)
 public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
     private let pluginVersion: String = "8.0.3"
@@ -16,13 +14,16 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getOSInfo", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getPluginVersion", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "getPluginVersion", returnType: CAPPluginReturnPromise),
     ]
 
     @objc func createAlarm(_ call: CAPPluginCall) {
         let hour = call.getInt("hour") ?? -1
         let minute = call.getInt("minute") ?? -1
-        if hour < 0 || minute < 0 { call.reject("hour and minute are required"); return }
+        if hour < 0 || minute < 0 {
+            call.reject("hour and minute are required")
+            return
+        }
         let label = call.getString("label")
 
         AlarmKitBridge.createAlarm(hour: hour, minute: minute, label: label) { success, message in
@@ -43,7 +44,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
             "platform": "ios",
             "version": version,
             "supportsNativeAlarms": supportsNative,
-            "supportsScheduledNotifications": true
+            "supportsScheduledNotifications": true,
         ])
     }
 
@@ -53,7 +54,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
             call.resolve([
                 "granted": false,
                 "details": ["alarmKit": false],
-                "message": "AlarmKit not available on this device/SDK"
+                "message": "AlarmKit not available on this device/SDK",
             ])
             return
         }
@@ -61,7 +62,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         AlarmKitBridge.currentAuthorizationStatus { granted, statusDescription in
             var result: [String: Any] = [
                 "granted": granted,
-                "details": ["alarmKit": granted]
+                "details": ["alarmKit": granted],
             ]
             if !granted, let statusDescription = statusDescription {
                 result["message"] = "AlarmKit authorization status: \(statusDescription)"
