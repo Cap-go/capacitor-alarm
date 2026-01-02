@@ -113,7 +113,7 @@ public class CapgoAlarmPlugin extends Plugin {
     public void checkPermissions(PluginCall call) {
         JSObject ret = new JSObject();
         JSObject details = new JSObject();
-        boolean granted = true;
+        boolean granted = Build.VERSION.SDK_INT < Build.VERSION_CODES.S;
         boolean hasDetails = false;
         String message = null;
 
@@ -127,6 +127,7 @@ public class CapgoAlarmPlugin extends Plugin {
                 boolean canExact = am != null && am.canScheduleExactAlarms();
                 details.put("exactAlarm", canExact);
                 hasDetails = true;
+                granted = canExact;
                 if (!canExact) {
                     message = "Exact alarm permission not granted";
                 }
@@ -135,6 +136,7 @@ public class CapgoAlarmPlugin extends Plugin {
                 hasDetails = true;
                 message = "Failed to query exact alarm capability";
                 Log.w(TAG, "Unable to determine exact alarm capability status", e);
+                granted = false;
             }
         } else {
             message = "Exact alarm capability check requires Android S+";
