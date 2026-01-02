@@ -46,14 +46,8 @@ class AlarmKitBridge {
     static func currentAuthorizationStatus(completion: @escaping (Bool, String?) -> Void) {
         #if canImport(AlarmKit)
             if #available(iOS 26.0, *) {
-                Task {
-                    do {
-                        let status = try await AlarmManager.shared.requestAuthorization()
-                        completion(status == .authorized, String(describing: status))
-                    } catch {
-                        completion(false, "Authorization error: \(error.localizedDescription)")
-                    }
-                }
+                let status = AlarmManager.shared.authorizationState
+                completion(status == .authorized, String(describing: status))
                 return
             }
         #endif

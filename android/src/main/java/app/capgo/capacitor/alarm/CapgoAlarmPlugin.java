@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.AlarmClock;
+import android.util.Log;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -15,6 +16,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 public class CapgoAlarmPlugin extends Plugin {
 
     private final String pluginVersion = "8.0.3";
+    private static final String TAG = "CapgoAlarmPlugin";
 
     // ===== Native OS Alarm helpers (Android) =====
     @PluginMethod
@@ -113,17 +115,37 @@ public class CapgoAlarmPlugin extends Plugin {
         JSObject details = new JSObject();
         boolean granted = true;
         boolean hasDetails = false;
+        String message = null;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            AlarmManager am = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-            boolean canExact = am != null && am.canScheduleExactAlarms();
-            details.put("exactAlarm", canExact);
-            hasDetails = true;
+            try {
+                Context context = getContext();
+                if (context == null) {
+                    throw new IllegalStateException("Plugin context unavailable");
+                }
+                AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                boolean canExact = am != null && am.canScheduleExactAlarms();
+                details.put("exactAlarm", canExact);
+                hasDetails = true;
+                if (!canExact) {
+                    message = "Exact alarm permission not granted";
+                }
+            } catch (Exception e) {
+                details.put("exactAlarm", false);
+                hasDetails = true;
+                message = "Failed to query exact alarm capability";
+                Log.w(TAG, "Unable to determine exact alarm capability status", e);
+            }
+        } else {
+            message = "Exact alarm capability check requires Android S+";
         }
 
         ret.put("granted", granted);
         if (hasDetails) {
             ret.put("details", details);
+        }
+        if (message != null) {
+            ret.put("message", message);
         }
         call.resolve(ret);
     }

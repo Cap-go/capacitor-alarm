@@ -14,7 +14,7 @@ const missingCheckPermissionsResult: PermissionResult = {
 
 const nativeCheckPermissions = CapgoAlarm.checkPermissions?.bind(CapgoAlarm);
 
-CapgoAlarm.checkPermissions = (async () => {
+CapgoAlarm.checkPermissions = (async (): Promise<PermissionResult> => {
   if (!nativeCheckPermissions) {
     return missingCheckPermissionsResult;
   }
