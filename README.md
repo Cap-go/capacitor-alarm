@@ -225,11 +225,11 @@ Returned info about current OS and capabilities.
 
 Result of a permissions request.
 
-| Prop          | Type                                                             | Description                            |
-| ------------- | ---------------------------------------------------------------- | -------------------------------------- |
-| **`granted`** | <code>boolean</code>                                             | Overall grant for requested scope      |
-| **`details`** | <code><a href="#record">Record</a>&lt;string, boolean&gt;</code> | Optional details by permission key     |
-| **`message`** | <code>string</code>                                              | Optional human readable diagnostic     |
+| Prop          | Type                                                             | Description                        |
+| ------------- | ---------------------------------------------------------------- | ---------------------------------- |
+| **`granted`** | <code>boolean</code>                                             | Overall grant for requested scope  |
+| **`details`** | <code><a href="#record">Record</a>&lt;string, boolean&gt;</code> | Optional details by permission key |
+| **`message`** | <code>string</code>                                              | Optional human readable diagnostic |
 
 
 #### AlarmInfo
