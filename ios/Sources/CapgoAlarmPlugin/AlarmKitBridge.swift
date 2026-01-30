@@ -42,6 +42,17 @@ class AlarmKitBridge {
         completion(false, "AlarmKit not available on this device/SDK")
     }
 
+    static func currentAuthorizationStatus(completion: @escaping (Bool, String?) -> Void) {
+        #if canImport(AlarmKit)
+        if #available(iOS 26.0, *) {
+            let status = AlarmManager.shared.authorizationState
+            completion(status == .authorized, String(describing: status))
+            return
+        }
+        #endif
+        completion(false, "AlarmKit not available on this device/SDK")
+    }
+
     static func createAlarm(hour: Int, minute: Int, label: String?, completion: @escaping (Bool, String?) -> Void) {
         #if canImport(AlarmKit)
         if #available(iOS 26.0, *) {

@@ -74,6 +74,8 @@ export interface PermissionResult {
   granted: boolean;
   /** Optional details by permission key */
   details?: Record<string, boolean>;
+  /** Optional human readable diagnostic */
+  message?: string;
 }
 
 /**
@@ -157,6 +159,21 @@ export interface CapgoAlarmPlugin {
    * ```
    */
   requestPermissions(options?: { exactAlarm?: boolean }): Promise<PermissionResult>;
+
+  /**
+   * Check the current permission state for native alarm access without triggering UI.
+   * On iOS this reports AlarmKit readiness; on Android it reports capability details.
+   *
+   * @returns Promise that resolves with the permission result
+   * @throws Error if the native layer fails to respond
+   * @since 8.0.4
+   * @example
+   * ```typescript
+   * const status = await CapgoAlarm.checkPermissions();
+   * console.log('AlarmKit allowed?', status.details?.alarmKit);
+   * ```
+   */
+  checkPermissions(): Promise<PermissionResult>;
 
   /**
    * Get the native Capacitor plugin version.
