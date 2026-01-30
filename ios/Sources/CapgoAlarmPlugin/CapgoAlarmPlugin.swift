@@ -75,7 +75,8 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func getAlarms(_ call: CAPPluginCall) {
         AlarmKitBridge.getAlarms { alarms, error in
             if let error = error {
-                call.reject(error)
+                // Return empty array with error message for consistency
+                call.resolve(["alarms": [], "message": error])
             } else {
                 call.resolve(["alarms": alarms])
             }

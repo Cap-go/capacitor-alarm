@@ -113,7 +113,8 @@ class AlarmKitBridge {
             return
         }
         #endif
-        completion([], "AlarmKit not available on this device/SDK")
+        // Return empty list for consistency with Android/Web when not supported
+        completion([], nil)
     }
 }
 

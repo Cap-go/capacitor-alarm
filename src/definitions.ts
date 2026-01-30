@@ -178,7 +178,6 @@ export interface CapgoAlarmPlugin {
    * as the system does not provide an API to query alarms.
    *
    * @returns Promise that resolves with an array of alarm information
-   * @throws Error if getting alarms fails
    * @since 1.1.0
    * @example
    * ```typescript
@@ -189,5 +188,5 @@ export interface CapgoAlarmPlugin {
    * });
    * ```
    */
-  getAlarms(): Promise<{ alarms: AlarmInfo[] }>;
+  getAlarms(): Promise<{ alarms: AlarmInfo[]; message?: string }>;
 }

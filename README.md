@@ -145,14 +145,14 @@ Get the native Capacitor plugin version.
 ### getAlarms()
 
 ```typescript
-getAlarms() => Promise<{ alarms: AlarmInfo[]; }>
+getAlarms() => Promise<{ alarms: AlarmInfo[]; message?: string; }>
 ```
 
 Get a list of alarms scheduled by this app.
 On iOS 26+, returns alarms from AlarmKit. On Android, this is not supported
 as the system does not provide an API to query alarms.
 
-**Returns:** <code>Promise&lt;{ alarms: AlarmInfo[]; }&gt;</code>
+**Returns:** <code>Promise&lt;{ alarms: AlarmInfo[]; message?: string; }&gt;</code>
 
 **Since:** 1.1.0
 
