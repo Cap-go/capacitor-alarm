@@ -6,6 +6,7 @@ import type {
   NativeActionResult,
   OSInfo,
   PermissionResult,
+  AlarmInfo,
 } from './definitions';
 
 export class CapgoAlarmWeb extends WebPlugin implements CapgoAlarmPlugin {
@@ -32,5 +33,9 @@ export class CapgoAlarmWeb extends WebPlugin implements CapgoAlarmPlugin {
 
   async getPluginVersion(): Promise<{ version: string }> {
     return { version: 'web' };
+  }
+
+  async getAlarms(): Promise<{ alarms: AlarmInfo[] }> {
+    return { alarms: [] };
   }
 }

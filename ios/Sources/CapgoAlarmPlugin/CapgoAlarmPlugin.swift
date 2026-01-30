@@ -15,7 +15,8 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "openAlarms", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getOSInfo", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getPluginVersion", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "getPluginVersion", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getAlarms", returnType: CAPPluginReturnPromise)
     ]
 
     @objc func createAlarm(_ call: CAPPluginCall) {
@@ -69,6 +70,16 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func getPluginVersion(_ call: CAPPluginCall) {
         call.resolve(["version": self.pluginVersion])
+    }
+
+    @objc func getAlarms(_ call: CAPPluginCall) {
+        AlarmKitBridge.getAlarms { alarms, error in
+            if let error = error {
+                call.reject(error)
+            } else {
+                call.resolve(["alarms": alarms])
+            }
+        }
     }
 
 }
