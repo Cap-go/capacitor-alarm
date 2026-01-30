@@ -89,11 +89,75 @@ class AlarmKitBridge {
         completion(false, "Clock UI cannot be opened on this platform.")
         #endif
     }
+
+    static func getAlarms(completion: @escaping ([[String: Any]], String?) -> Void) {
+        #if canImport(AlarmKit)
+        if #available(iOS 26.0, *) {
+            Task {
+                do {
+                    let alarmManager = AlarmManager.shared
+                    let alarms = try alarmManager.alarms
+                    
+                    var alarmsList: [[String: Any]] = []
+                    for alarm in alarms {
+                        if let alarmDict = convertAlarmToDict(alarm: alarm) {
+                            alarmsList.append(alarmDict)
+                        }
+                    }
+                    
+                    completion(alarmsList, nil)
+                } catch {
+                    completion([], "Failed to retrieve alarms: \(error.localizedDescription)")
+                }
+            }
+            return
+        }
+        #endif
+        // Return empty list for consistency with Android/Web when not supported
+        completion([], nil)
+    }
 }
 
 #if canImport(AlarmKit)
 @available(iOS 26.0, *)
 private extension AlarmKitBridge {
+    static func convertAlarmToDict(alarm: Alarm) -> [String: Any]? {
+        // Get the trigger date from the schedule
+        var triggerDate: Date?
+        let schedule = alarm.configuration.schedule
+        
+        // Extract date based on schedule type
+        if case .fixed(let date) = schedule {
+            triggerDate = date
+        } else if case .repeating(let dateComponents) = schedule {
+            // For repeating alarms, create a date from components
+            triggerDate = Calendar.current.date(from: dateComponents)
+        }
+        
+        guard let date = triggerDate else {
+            return nil
+        }
+        
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+        guard let hour = components.hour, let minute = components.minute else {
+            return nil
+        }
+        
+        // Try to get label from metadata if available
+        var label: String? = nil
+        if let metadata = alarm.configuration.attributes.metadata as? AlarmBridgeMetadata {
+            label = metadata.label
+        }
+        
+        return [
+            "id": alarm.id.uuidString,
+            "hour": hour,
+            "minute": minute,
+            "label": label ?? NSNull(),
+            "enabled": alarm.state == .active
+        ]
+    }
+    
     static func sanitizedLabel(_ label: String?) -> String {
         let trimmed = label?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return trimmed.isEmpty ? "Alarm" : trimmed

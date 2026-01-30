@@ -53,6 +53,16 @@ return result;
   run: async (values) => {
     return await plugin.openAlarms();
   },
+},
+{
+  id: 'get-alarms',
+  label: 'Get scheduled alarms',
+  description: 'Retrieves a list of alarms scheduled by this app. Works on iOS 26+ with AlarmKit.',
+  inputs: [],
+  run: async (values) => {
+    const result = await plugin.getAlarms();
+    return result;
+  },
 }
 ];
 

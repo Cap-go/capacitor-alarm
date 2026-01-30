@@ -29,6 +29,24 @@ export interface NativeActionResult {
 }
 
 /**
+ * Information about a scheduled alarm.
+ *
+ * @since 1.1.0
+ */
+export interface AlarmInfo {
+  /** Unique identifier for the alarm */
+  id: string;
+  /** Hour of day in 24h format (0-23) */
+  hour: number;
+  /** Minute of hour (0-59) */
+  minute: number;
+  /** Optional label for the alarm */
+  label?: string;
+  /** Whether the alarm is enabled */
+  enabled?: boolean;
+}
+
+/**
  * Returned info about current OS and capabilities.
  *
  * @since 1.0.0
@@ -153,4 +171,22 @@ export interface CapgoAlarmPlugin {
    * ```
    */
   getPluginVersion(): Promise<{ version: string }>;
+
+  /**
+   * Get a list of alarms scheduled by this app.
+   * On iOS 26+, returns alarms from AlarmKit. On Android, this is not supported
+   * as the system does not provide an API to query alarms.
+   *
+   * @returns Promise that resolves with an array of alarm information
+   * @since 1.1.0
+   * @example
+   * ```typescript
+   * const { alarms } = await CapgoAlarm.getAlarms();
+   * console.log('Scheduled alarms:', alarms);
+   * alarms.forEach(alarm => {
+   *   console.log(`Alarm ${alarm.id}: ${alarm.hour}:${alarm.minute} - ${alarm.label}`);
+   * });
+   * ```
+   */
+  getAlarms(): Promise<{ alarms: AlarmInfo[]; message?: string }>;
 }

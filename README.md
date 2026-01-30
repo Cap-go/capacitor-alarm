@@ -46,6 +46,7 @@ Note: This plugin only exposes native alarm actions (create/open). It does not i
 * [`getOSInfo()`](#getosinfo)
 * [`requestPermissions(...)`](#requestpermissions)
 * [`getPluginVersion()`](#getpluginversion)
+* [`getAlarms()`](#getalarms)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -141,6 +142,23 @@ Get the native Capacitor plugin version.
 --------------------
 
 
+### getAlarms()
+
+```typescript
+getAlarms() => Promise<{ alarms: AlarmInfo[]; message?: string; }>
+```
+
+Get a list of alarms scheduled by this app.
+On iOS 26+, returns alarms from AlarmKit. On Android, this is not supported
+as the system does not provide an API to query alarms.
+
+**Returns:** <code>Promise&lt;{ alarms: AlarmInfo[]; message?: string; }&gt;</code>
+
+**Since:** 1.1.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -188,6 +206,19 @@ Result of a permissions request.
 | ------------- | ---------------------------------------------------------------- | ---------------------------------- |
 | **`granted`** | <code>boolean</code>                                             | Overall grant for requested scope  |
 | **`details`** | <code><a href="#record">Record</a>&lt;string, boolean&gt;</code> | Optional details by permission key |
+
+
+#### AlarmInfo
+
+Information about a scheduled alarm.
+
+| Prop          | Type                 | Description                      |
+| ------------- | -------------------- | -------------------------------- |
+| **`id`**      | <code>string</code>  | Unique identifier for the alarm  |
+| **`hour`**    | <code>number</code>  | Hour of day in 24h format (0-23) |
+| **`minute`**  | <code>number</code>  | Minute of hour (0-59)            |
+| **`label`**   | <code>string</code>  | Optional label for the alarm     |
+| **`enabled`** | <code>boolean</code> | Whether the alarm is enabled     |
 
 
 ### Type Aliases

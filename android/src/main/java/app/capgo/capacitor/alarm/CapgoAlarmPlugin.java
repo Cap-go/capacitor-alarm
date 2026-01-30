@@ -117,4 +117,13 @@ public class CapgoAlarmPlugin extends Plugin {
             call.reject("Could not get plugin version", e);
         }
     }
+
+    @PluginMethod
+    public void getAlarms(PluginCall call) {
+        // Android does not provide a public API to query system alarms
+        // Each app must track its own alarms
+        JSObject ret = new JSObject();
+        ret.put("alarms", new org.json.JSONArray());
+        call.resolve(ret);
+    }
 }
