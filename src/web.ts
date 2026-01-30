@@ -31,6 +31,13 @@ export class CapgoAlarmWeb extends WebPlugin implements CapgoAlarmPlugin {
     return { granted: true };
   }
 
+  async checkPermissions(): Promise<PermissionResult> {
+    return {
+      granted: false,
+      message: 'Native alarm permissions are not available on web',
+    };
+  }
+
   async getPluginVersion(): Promise<{ version: string }> {
     return { version: 'web' };
   }
