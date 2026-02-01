@@ -26,6 +26,8 @@ export interface NativeActionResult {
   success: boolean;
   /** Optional message with additional information */
   message?: string;
+  /** Optional alarm ID (returned by createAlarm on iOS) */
+  id?: string;
 }
 
 /**
@@ -36,10 +38,10 @@ export interface NativeActionResult {
 export interface AlarmInfo {
   /** Unique identifier for the alarm */
   id: string;
-  /** Hour of day in 24h format (0-23) */
-  hour: number;
-  /** Minute of hour (0-59) */
-  minute: number;
+  /** Hour of day in 24h format (0-23). May be absent for alarms created outside this plugin. */
+  hour?: number;
+  /** Minute of hour (0-59). May be absent for alarms created outside this plugin. */
+  minute?: number;
   /** Optional label for the alarm */
   label?: string;
   /** Whether the alarm is enabled */
@@ -206,4 +208,21 @@ export interface CapgoAlarmPlugin {
    * ```
    */
   getAlarms(): Promise<{ alarms: AlarmInfo[]; message?: string }>;
+
+  /**
+   * Cancel a scheduled alarm by its ID.
+   * On iOS 26+, removes the alarm from AlarmKit. On Android/web, returns not supported.
+   *
+   * @param options - Options containing the alarm ID to cancel
+   * @returns Promise resolving with the result of the action
+   * @since 8.1.0
+   * @example
+   * ```typescript
+   * const result = await CapgoAlarm.cancelAlarm({ id: 'alarm-uuid-here' });
+   * if (result.success) {
+   *   console.log('Alarm cancelled');
+   * }
+   * ```
+   */
+  cancelAlarm(options: { id: string }): Promise<NativeActionResult>;
 }

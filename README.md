@@ -65,6 +65,7 @@ If your native runtime ships an older build of this plugin that predates the `ch
 * [`checkPermissions()`](#checkpermissions)
 * [`getPluginVersion()`](#getpluginversion)
 * [`getAlarms()`](#getalarms)
+* [`cancelAlarm(...)`](#cancelalarm)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -193,6 +194,26 @@ as the system does not provide an API to query alarms.
 --------------------
 
 
+### cancelAlarm(...)
+
+```typescript
+cancelAlarm(options: { id: string; }) => Promise<NativeActionResult>
+```
+
+Cancel a scheduled alarm by its ID.
+On iOS 26+, removes the alarm from AlarmKit. On Android/web, returns not supported.
+
+| Param         | Type                         | Description                                 |
+| ------------- | ---------------------------- | ------------------------------------------- |
+| **`options`** | <code>{ id: string; }</code> | - Options containing the alarm ID to cancel |
+
+**Returns:** <code>Promise&lt;<a href="#nativeactionresult">NativeActionResult</a>&gt;</code>
+
+**Since:** 8.1.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -200,10 +221,11 @@ as the system does not provide an API to query alarms.
 
 Result of a native action.
 
-| Prop          | Type                 | Description                                  |
-| ------------- | -------------------- | -------------------------------------------- |
-| **`success`** | <code>boolean</code> | Whether the action was successful            |
-| **`message`** | <code>string</code>  | Optional message with additional information |
+| Prop          | Type                 | Description                                        |
+| ------------- | -------------------- | -------------------------------------------------- |
+| **`success`** | <code>boolean</code> | Whether the action was successful                  |
+| **`message`** | <code>string</code>  | Optional message with additional information       |
+| **`id`**      | <code>string</code>  | Optional alarm ID (returned by createAlarm on iOS) |
 
 
 #### NativeAlarmCreateOptions
@@ -247,13 +269,13 @@ Result of a permissions request.
 
 Information about a scheduled alarm.
 
-| Prop          | Type                 | Description                      |
-| ------------- | -------------------- | -------------------------------- |
-| **`id`**      | <code>string</code>  | Unique identifier for the alarm  |
-| **`hour`**    | <code>number</code>  | Hour of day in 24h format (0-23) |
-| **`minute`**  | <code>number</code>  | Minute of hour (0-59)            |
-| **`label`**   | <code>string</code>  | Optional label for the alarm     |
-| **`enabled`** | <code>boolean</code> | Whether the alarm is enabled     |
+| Prop          | Type                 | Description                                                                             |
+| ------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| **`id`**      | <code>string</code>  | Unique identifier for the alarm                                                         |
+| **`hour`**    | <code>number</code>  | Hour of day in 24h format (0-23). May be absent for alarms created outside this plugin. |
+| **`minute`**  | <code>number</code>  | Minute of hour (0-59). May be absent for alarms created outside this plugin.            |
+| **`label`**   | <code>string</code>  | Optional label for the alarm                                                            |
+| **`enabled`** | <code>boolean</code> | Whether the alarm is enabled                                                            |
 
 
 ### Type Aliases

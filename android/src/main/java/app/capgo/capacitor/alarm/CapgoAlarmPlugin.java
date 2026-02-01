@@ -85,7 +85,7 @@ public class CapgoAlarmPlugin extends Plugin {
     }
 
     @Override
-    protected void requestPermissions(PluginCall call) {
+    public void requestPermissions(PluginCall call) {
         boolean requestExact = call.getBoolean("exactAlarm", false);
         JSObject ret = new JSObject();
         if (requestExact && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -110,7 +110,7 @@ public class CapgoAlarmPlugin extends Plugin {
     }
 
     @Override
-    protected void checkPermissions(PluginCall call) {
+    public void checkPermissions(PluginCall call) {
         JSObject ret = new JSObject();
         JSObject details = new JSObject();
         boolean granted = Build.VERSION.SDK_INT < Build.VERSION_CODES.S;
@@ -169,6 +169,14 @@ public class CapgoAlarmPlugin extends Plugin {
         // Each app must track its own alarms
         JSObject ret = new JSObject();
         ret.put("alarms", new org.json.JSONArray());
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void cancelAlarm(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("success", false);
+        ret.put("message", "Cancel alarm is not supported on Android");
         call.resolve(ret);
     }
 }
