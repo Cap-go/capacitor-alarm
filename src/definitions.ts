@@ -206,4 +206,21 @@ export interface CapgoAlarmPlugin {
    * ```
    */
   getAlarms(): Promise<{ alarms: AlarmInfo[]; message?: string }>;
+
+  /**
+   * Cancel a scheduled alarm by its ID.
+   * On iOS 26+, removes the alarm from AlarmKit. On Android/web, returns not supported.
+   *
+   * @param options - Options containing the alarm ID to cancel
+   * @returns Promise resolving with the result of the action
+   * @since 8.1.0
+   * @example
+   * ```typescript
+   * const result = await CapgoAlarm.cancelAlarm({ id: 'alarm-uuid-here' });
+   * if (result.success) {
+   *   console.log('Alarm cancelled');
+   * }
+   * ```
+   */
+  cancelAlarm(options: { id: string }): Promise<NativeActionResult>;
 }

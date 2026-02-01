@@ -17,7 +17,8 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getPluginVersion", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getAlarms", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "getAlarms", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "cancelAlarm", returnType: CAPPluginReturnPromise)
     ]
 
     @objc func createAlarm(_ call: CAPPluginCall) {
@@ -98,6 +99,16 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
             } else {
                 call.resolve(["alarms": alarms])
             }
+        }
+    }
+
+    @objc func cancelAlarm(_ call: CAPPluginCall) {
+        guard let id = call.getString("id") else {
+            call.reject("Missing alarm id")
+            return
+        }
+        AlarmKitBridge.cancelAlarm(id: id) { success, message in
+            call.resolve(["success": success, "message": message ?? NSNull()])
         }
     }
 

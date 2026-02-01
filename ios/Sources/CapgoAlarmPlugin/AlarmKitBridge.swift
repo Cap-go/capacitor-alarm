@@ -108,14 +108,14 @@ class AlarmKitBridge {
                 do {
                     let alarmManager = AlarmManager.shared
                     let alarms = try alarmManager.alarms
-                    
+
                     var alarmsList: [[String: Any]] = []
                     for alarm in alarms {
                         if let alarmDict = convertAlarmToDict(alarm: alarm) {
                             alarmsList.append(alarmDict)
                         }
                     }
-                    
+
                     completion(alarmsList, nil)
                 } catch {
                     completion([], "Failed to retrieve alarms: \(error.localizedDescription)")
@@ -126,6 +126,27 @@ class AlarmKitBridge {
         #endif
         // Return empty list for consistency with Android/Web when not supported
         completion([], nil)
+    }
+
+    static func cancelAlarm(id: String, completion: @escaping (Bool, String?) -> Void) {
+        #if canImport(AlarmKit)
+        if #available(iOS 26.0, *) {
+            guard let uuid = UUID(uuidString: id) else {
+                completion(false, "Invalid alarm ID format")
+                return
+            }
+            Task {
+                do {
+                    try await AlarmManager.shared.cancel(id: uuid)
+                    completion(true, "Alarm cancelled")
+                } catch {
+                    completion(false, "Failed to cancel alarm: \(error.localizedDescription)")
+                }
+            }
+            return
+        }
+        #endif
+        completion(false, "AlarmKit not available on this device/SDK")
     }
 }
 

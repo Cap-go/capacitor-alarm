@@ -45,4 +45,8 @@ export class CapgoAlarmWeb extends WebPlugin implements CapgoAlarmPlugin {
   async getAlarms(): Promise<{ alarms: AlarmInfo[] }> {
     return { alarms: [] };
   }
+
+  async cancelAlarm(_options: { id: string }): Promise<NativeActionResult> {
+    return { success: false, message: 'Cancel alarm is not supported on web' };
+  }
 }

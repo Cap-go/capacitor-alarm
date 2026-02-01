@@ -65,6 +65,7 @@ If your native runtime ships an older build of this plugin that predates the `ch
 * [`checkPermissions()`](#checkpermissions)
 * [`getPluginVersion()`](#getpluginversion)
 * [`getAlarms()`](#getalarms)
+* [`cancelAlarm(...)`](#cancelalarm)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -189,6 +190,26 @@ as the system does not provide an API to query alarms.
 **Returns:** <code>Promise&lt;{ alarms: AlarmInfo[]; message?: string; }&gt;</code>
 
 **Since:** 1.1.0
+
+--------------------
+
+
+### cancelAlarm(...)
+
+```typescript
+cancelAlarm(options: { id: string; }) => Promise<NativeActionResult>
+```
+
+Cancel a scheduled alarm by its ID.
+On iOS 26+, removes the alarm from AlarmKit. On Android/web, returns not supported.
+
+| Param         | Type                         | Description                                 |
+| ------------- | ---------------------------- | ------------------------------------------- |
+| **`options`** | <code>{ id: string; }</code> | - Options containing the alarm ID to cancel |
+
+**Returns:** <code>Promise&lt;<a href="#nativeactionresult">NativeActionResult</a>&gt;</code>
+
+**Since:** 8.1.0
 
 --------------------
 
