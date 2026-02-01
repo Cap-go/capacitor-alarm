@@ -19,6 +19,7 @@ class AlarmKitBridge {
     // MARK: - UserDefaults Storage for Alarm Metadata
 
     private static let storageKey = "CapgoAlarm.alarmMetadata"
+    private static let metadataQueue = DispatchQueue(label: "CapgoAlarm.alarmMetadata.queue")
 
     private static func loadStoredMetadata() -> [String: [String: Any]] {
         UserDefaults.standard.dictionary(forKey: storageKey) as? [String: [String: Any]] ?? [:]
@@ -29,41 +30,52 @@ class AlarmKitBridge {
     }
 
     private static func storeAlarmMetadata(id: String, hour: Int, minute: Int, label: String?) {
-        var metadata = loadStoredMetadata()
-        metadata[id] = [
-            "hour": hour,
-            "minute": minute,
-            "label": label ?? NSNull()
-        ]
-        saveStoredMetadata(metadata)
+        metadataQueue.sync {
+            var metadata = loadStoredMetadata()
+            var entry: [String: Any] = [
+                "hour": hour,
+                "minute": minute
+            ]
+            if let label = label {
+                entry["label"] = label
+            }
+            metadata[id] = entry
+            saveStoredMetadata(metadata)
+        }
     }
 
     private static func removeAlarmMetadata(id: String) {
-        var metadata = loadStoredMetadata()
-        metadata.removeValue(forKey: id)
-        saveStoredMetadata(metadata)
+        metadataQueue.sync {
+            var metadata = loadStoredMetadata()
+            metadata.removeValue(forKey: id)
+            saveStoredMetadata(metadata)
+        }
     }
 
     private static func getAlarmMetadata(id: String) -> (hour: Int, minute: Int, label: String?)? {
-        let metadata = loadStoredMetadata()
-        guard let data = metadata[id],
-              let hour = data["hour"] as? Int,
-              let minute = data["minute"] as? Int else {
-            return nil
+        metadataQueue.sync {
+            let metadata = loadStoredMetadata()
+            guard let data = metadata[id],
+                  let hour = data["hour"] as? Int,
+                  let minute = data["minute"] as? Int else {
+                return nil
+            }
+            let label = data["label"] as? String
+            return (hour, minute, label)
         }
-        let label = data["label"] as? String
-        return (hour, minute, label)
     }
 
     private static func pruneOrphanedMetadata(validIds: Set<String>) {
-        var metadata = loadStoredMetadata()
-        let storedIds = Set(metadata.keys)
-        let orphanedIds = storedIds.subtracting(validIds)
-        for id in orphanedIds {
-            metadata.removeValue(forKey: id)
-        }
-        if !orphanedIds.isEmpty {
-            saveStoredMetadata(metadata)
+        metadataQueue.sync {
+            var metadata = loadStoredMetadata()
+            let storedIds = Set(metadata.keys)
+            let orphanedIds = storedIds.subtracting(validIds)
+            for id in orphanedIds {
+                metadata.removeValue(forKey: id)
+            }
+            if !orphanedIds.isEmpty {
+                saveStoredMetadata(metadata)
+            }
         }
     }
 
@@ -127,8 +139,8 @@ class AlarmKitBridge {
                     let alarmId = UUID()
                     _ = try await AlarmManager.shared.schedule(id: alarmId, configuration: configuration)
 
-                    // Store metadata for later retrieval
-                    storeAlarmMetadata(id: alarmId.uuidString, hour: hour, minute: minute, label: label)
+                    // Store metadata for later retrieval (use displayLabel so stored title matches system)
+                    storeAlarmMetadata(id: alarmId.uuidString, hour: hour, minute: minute, label: displayLabel)
 
                     let formatter = DateFormatter()
                     formatter.dateStyle = .none
@@ -219,25 +231,22 @@ private extension AlarmKitBridge {
         let idString = alarm.id.uuidString
         let isEnabled = alarm.state == .scheduled || alarm.state == .countdown || alarm.state == .alerting
 
-        // Look up stored metadata for hour/minute/label
-        if let metadata = getAlarmMetadata(id: idString) {
-            return [
-                "id": idString,
-                "hour": metadata.hour,
-                "minute": metadata.minute,
-                "label": metadata.label ?? NSNull(),
-                "enabled": isEnabled
-            ]
-        }
-
-        // Fallback if no stored metadata (alarm created outside this plugin)
-        return [
+        var dict: [String: Any] = [
             "id": idString,
-            "hour": NSNull(),
-            "minute": NSNull(),
-            "label": NSNull(),
             "enabled": isEnabled
         ]
+
+        // Look up stored metadata for hour/minute/label
+        if let metadata = getAlarmMetadata(id: idString) {
+            dict["hour"] = metadata.hour
+            dict["minute"] = metadata.minute
+            if let label = metadata.label {
+                dict["label"] = label
+            }
+        }
+        // If no stored metadata (alarm created outside this plugin), hour/minute/label are omitted
+
+        return dict
     }
     
     static func sanitizedLabel(_ label: String?) -> String {

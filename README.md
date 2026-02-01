@@ -269,13 +269,13 @@ Result of a permissions request.
 
 Information about a scheduled alarm.
 
-| Prop          | Type                 | Description                      |
-| ------------- | -------------------- | -------------------------------- |
-| **`id`**      | <code>string</code>  | Unique identifier for the alarm  |
-| **`hour`**    | <code>number</code>  | Hour of day in 24h format (0-23) |
-| **`minute`**  | <code>number</code>  | Minute of hour (0-59)            |
-| **`label`**   | <code>string</code>  | Optional label for the alarm     |
-| **`enabled`** | <code>boolean</code> | Whether the alarm is enabled     |
+| Prop          | Type                 | Description                                                                             |
+| ------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| **`id`**      | <code>string</code>  | Unique identifier for the alarm                                                         |
+| **`hour`**    | <code>number</code>  | Hour of day in 24h format (0-23). May be absent for alarms created outside this plugin. |
+| **`minute`**  | <code>number</code>  | Minute of hour (0-59). May be absent for alarms created outside this plugin.            |
+| **`label`**   | <code>string</code>  | Optional label for the alarm                                                            |
+| **`enabled`** | <code>boolean</code> | Whether the alarm is enabled                                                            |
 
 
 ### Type Aliases

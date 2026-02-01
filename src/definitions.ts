@@ -38,10 +38,10 @@ export interface NativeActionResult {
 export interface AlarmInfo {
   /** Unique identifier for the alarm */
   id: string;
-  /** Hour of day in 24h format (0-23) */
-  hour: number;
-  /** Minute of hour (0-59) */
-  minute: number;
+  /** Hour of day in 24h format (0-23). May be absent for alarms created outside this plugin. */
+  hour?: number;
+  /** Minute of hour (0-59). May be absent for alarms created outside this plugin. */
+  minute?: number;
   /** Optional label for the alarm */
   label?: string;
   /** Whether the alarm is enabled */

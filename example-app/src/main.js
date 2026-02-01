@@ -107,8 +107,8 @@ return result;
   ],
   run: async (values) => {
     const steps = [];
-    const hour = Number(values.hour) || 8;
-    const minute = Number(values.minute) || 0;
+    const hour = Number.isNaN(Number(values.hour)) ? 8 : Number(values.hour);
+    const minute = Number.isNaN(Number(values.minute)) ? 0 : Number(values.minute);
     const label = values.label || 'Test Alarm';
 
     // Step 1: Create alarm
