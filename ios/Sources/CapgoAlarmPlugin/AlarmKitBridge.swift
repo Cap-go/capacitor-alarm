@@ -16,6 +16,59 @@ private struct AlarmBridgeMetadata: AlarmMetadata {
 #endif
 
 class AlarmKitBridge {
+    // MARK: - UserDefaults Storage for Alarm Metadata
+
+    private static let storageKey = "CapgoAlarm.alarmMetadata"
+
+    private static func loadStoredMetadata() -> [String: [String: Any]] {
+        UserDefaults.standard.dictionary(forKey: storageKey) as? [String: [String: Any]] ?? [:]
+    }
+
+    private static func saveStoredMetadata(_ metadata: [String: [String: Any]]) {
+        UserDefaults.standard.set(metadata, forKey: storageKey)
+    }
+
+    private static func storeAlarmMetadata(id: String, hour: Int, minute: Int, label: String?) {
+        var metadata = loadStoredMetadata()
+        metadata[id] = [
+            "hour": hour,
+            "minute": minute,
+            "label": label ?? NSNull()
+        ]
+        saveStoredMetadata(metadata)
+    }
+
+    private static func removeAlarmMetadata(id: String) {
+        var metadata = loadStoredMetadata()
+        metadata.removeValue(forKey: id)
+        saveStoredMetadata(metadata)
+    }
+
+    private static func getAlarmMetadata(id: String) -> (hour: Int, minute: Int, label: String?)? {
+        let metadata = loadStoredMetadata()
+        guard let data = metadata[id],
+              let hour = data["hour"] as? Int,
+              let minute = data["minute"] as? Int else {
+            return nil
+        }
+        let label = data["label"] as? String
+        return (hour, minute, label)
+    }
+
+    private static func pruneOrphanedMetadata(validIds: Set<String>) {
+        var metadata = loadStoredMetadata()
+        let storedIds = Set(metadata.keys)
+        let orphanedIds = storedIds.subtracting(validIds)
+        for id in orphanedIds {
+            metadata.removeValue(forKey: id)
+        }
+        if !orphanedIds.isEmpty {
+            saveStoredMetadata(metadata)
+        }
+    }
+
+    // MARK: - Public API
+
     static func isAvailable() -> Bool {
         #if canImport(AlarmKit)
         if #available(iOS 26.0, *) { return true } else { return false }
@@ -53,24 +106,29 @@ class AlarmKitBridge {
         completion(false, "AlarmKit not available on this device/SDK")
     }
 
-    static func createAlarm(hour: Int, minute: Int, label: String?, completion: @escaping (Bool, String?) -> Void) {
+    static func createAlarm(hour: Int, minute: Int, label: String?, completion: @escaping (Bool, String?, String?) -> Void) {
         #if canImport(AlarmKit)
         if #available(iOS 26.0, *) {
             guard (0..<24).contains(hour), (0..<60).contains(minute) else {
-                completion(false, "Invalid time components for alarm.")
+                completion(false, "Invalid time components for alarm.", nil)
                 return
             }
 
             Task {
                 do {
                     guard let triggerDate = nextTriggerDate(hour: hour, minute: minute) else {
-                        completion(false, "Unable to compute next trigger date.")
+                        completion(false, "Unable to compute next trigger date.", nil)
                         return
                     }
                     let displayLabel = sanitizedLabel(label)
                     let configuration = try alarmConfiguration(triggerDate: triggerDate, label: displayLabel)
 
-                    _ = try await AlarmManager.shared.schedule(id: UUID(), configuration: configuration)
+                    // Generate UUID upfront so we can return it and store metadata
+                    let alarmId = UUID()
+                    _ = try await AlarmManager.shared.schedule(id: alarmId, configuration: configuration)
+
+                    // Store metadata for later retrieval
+                    storeAlarmMetadata(id: alarmId.uuidString, hour: hour, minute: minute, label: label)
 
                     let formatter = DateFormatter()
                     formatter.dateStyle = .none
@@ -79,15 +137,15 @@ class AlarmKitBridge {
                     formatter.timeZone = Calendar.current.timeZone
 
                     let message = "Alarm scheduled for \(formatter.string(from: triggerDate))."
-                    completion(true, message)
+                    completion(true, message, alarmId.uuidString)
                 } catch {
-                    completion(false, "Failed to schedule alarm: \(error.localizedDescription)")
+                    completion(false, "Failed to schedule alarm: \(error.localizedDescription)", nil)
                 }
             }
             return
         }
         #endif
-        completion(false, "AlarmKit not available on this device/SDK")
+        completion(false, "AlarmKit not available on this device/SDK", nil)
     }
 
     static func openAlarms(completion: @escaping (Bool, String?) -> Void) {
@@ -108,6 +166,10 @@ class AlarmKitBridge {
                 do {
                     let alarmManager = AlarmManager.shared
                     let alarms = try alarmManager.alarms
+
+                    // Collect valid alarm IDs and prune orphaned metadata
+                    let validIds = Set(alarms.map { $0.id.uuidString })
+                    pruneOrphanedMetadata(validIds: validIds)
 
                     var alarmsList: [[String: Any]] = []
                     for alarm in alarms {
@@ -137,6 +199,8 @@ class AlarmKitBridge {
             }
             do {
                 try AlarmManager.shared.cancel(id: uuid)
+                // Clean up stored metadata
+                removeAlarmMetadata(id: id)
                 completion(true, "Alarm cancelled")
             } catch {
                 completion(false, "Failed to cancel alarm: \(error.localizedDescription)")
@@ -152,13 +216,23 @@ class AlarmKitBridge {
 @available(iOS 26.0, *)
 private extension AlarmKitBridge {
     static func convertAlarmToDict(alarm: Alarm) -> [String: Any]? {
-        // AlarmKit Alarm objects only expose: id, countdownDuration, and state
-        // The schedule/configuration is not accessible after creation
-        // Return available info; hour/minute/label are not retrievable from the Alarm object
+        let idString = alarm.id.uuidString
         let isEnabled = alarm.state == .scheduled || alarm.state == .countdown || alarm.state == .alerting
 
+        // Look up stored metadata for hour/minute/label
+        if let metadata = getAlarmMetadata(id: idString) {
+            return [
+                "id": idString,
+                "hour": metadata.hour,
+                "minute": metadata.minute,
+                "label": metadata.label ?? NSNull(),
+                "enabled": isEnabled
+            ]
+        }
+
+        // Fallback if no stored metadata (alarm created outside this plugin)
         return [
-            "id": alarm.id.uuidString,
+            "id": idString,
             "hour": NSNull(),
             "minute": NSNull(),
             "label": NSNull(),

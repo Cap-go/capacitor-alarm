@@ -26,6 +26,8 @@ export interface NativeActionResult {
   success: boolean;
   /** Optional message with additional information */
   message?: string;
+  /** Optional alarm ID (returned by createAlarm on iOS) */
+  id?: string;
 }
 
 /**

@@ -221,10 +221,11 @@ On iOS 26+, removes the alarm from AlarmKit. On Android/web, returns not support
 
 Result of a native action.
 
-| Prop          | Type                 | Description                                  |
-| ------------- | -------------------- | -------------------------------------------- |
-| **`success`** | <code>boolean</code> | Whether the action was successful            |
-| **`message`** | <code>string</code>  | Optional message with additional information |
+| Prop          | Type                 | Description                                        |
+| ------------- | -------------------- | -------------------------------------------------- |
+| **`success`** | <code>boolean</code> | Whether the action was successful                  |
+| **`message`** | <code>string</code>  | Optional message with additional information       |
+| **`id`**      | <code>string</code>  | Optional alarm ID (returned by createAlarm on iOS) |
 
 
 #### NativeAlarmCreateOptions

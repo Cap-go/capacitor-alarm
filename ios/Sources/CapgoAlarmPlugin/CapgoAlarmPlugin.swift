@@ -27,8 +27,12 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         if hour < 0 || minute < 0 { call.reject("hour and minute are required"); return }
         let label = call.getString("label")
 
-        AlarmKitBridge.createAlarm(hour: hour, minute: minute, label: label) { success, message in
-            call.resolve(["success": success, "message": message ?? NSNull()])
+        AlarmKitBridge.createAlarm(hour: hour, minute: minute, label: label) { success, message, alarmId in
+            var result: [String: Any] = ["success": success, "message": message ?? NSNull()]
+            if let alarmId = alarmId {
+                result["id"] = alarmId
+            }
+            call.resolve(result)
         }
     }
 
