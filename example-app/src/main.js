@@ -117,7 +117,8 @@ return result;
     steps.push(`Created: ${JSON.stringify(createResult, null, 2)}`);
 
     if (!createResult.success || !createResult.id) {
-      steps.push('ERROR: Failed to create alarm or no ID returned');
+      steps.push('ERROR: Failed to create alarm or no ID returned.');
+      steps.push('Tip: Run "Request permissions" first, and ensure iOS 26+ simulator.');
       return steps.join('\n\n');
     }
 
