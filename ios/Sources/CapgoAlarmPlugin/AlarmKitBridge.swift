@@ -135,13 +135,11 @@ class AlarmKitBridge {
                 completion(false, "Invalid alarm ID format")
                 return
             }
-            Task {
-                do {
-                    try await AlarmManager.shared.cancel(id: uuid)
-                    completion(true, "Alarm cancelled")
-                } catch {
-                    completion(false, "Failed to cancel alarm: \(error.localizedDescription)")
-                }
+            do {
+                try AlarmManager.shared.cancel(id: uuid)
+                completion(true, "Alarm cancelled")
+            } catch {
+                completion(false, "Failed to cancel alarm: \(error.localizedDescription)")
             }
             return
         }
@@ -154,39 +152,17 @@ class AlarmKitBridge {
 @available(iOS 26.0, *)
 private extension AlarmKitBridge {
     static func convertAlarmToDict(alarm: Alarm) -> [String: Any]? {
-        // Get the trigger date from the schedule
-        var triggerDate: Date?
-        let schedule = alarm.configuration.schedule
-        
-        // Extract date based on schedule type
-        if case .fixed(let date) = schedule {
-            triggerDate = date
-        } else if case .repeating(let dateComponents) = schedule {
-            // For repeating alarms, create a date from components
-            triggerDate = Calendar.current.date(from: dateComponents)
-        }
-        
-        guard let date = triggerDate else {
-            return nil
-        }
-        
-        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
-        guard let hour = components.hour, let minute = components.minute else {
-            return nil
-        }
-        
-        // Try to get label from metadata if available
-        var label: String? = nil
-        if let metadata = alarm.configuration.attributes.metadata as? AlarmBridgeMetadata {
-            label = metadata.label
-        }
-        
+        // AlarmKit Alarm objects only expose: id, countdownDuration, and state
+        // The schedule/configuration is not accessible after creation
+        // Return available info; hour/minute/label are not retrievable from the Alarm object
+        let isEnabled = alarm.state == .scheduled || alarm.state == .countdown || alarm.state == .alerting
+
         return [
             "id": alarm.id.uuidString,
-            "hour": hour,
-            "minute": minute,
-            "label": label ?? NSNull(),
-            "enabled": alarm.state == .active
+            "hour": NSNull(),
+            "minute": NSNull(),
+            "label": NSNull(),
+            "enabled": isEnabled
         ]
     }
     
