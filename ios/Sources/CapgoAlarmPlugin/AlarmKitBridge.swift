@@ -108,14 +108,14 @@ class AlarmKitBridge {
                 do {
                     let alarmManager = AlarmManager.shared
                     let alarms = try alarmManager.alarms
-                    
+
                     var alarmsList: [[String: Any]] = []
                     for alarm in alarms {
                         if let alarmDict = convertAlarmToDict(alarm: alarm) {
                             alarmsList.append(alarmDict)
                         }
                     }
-                    
+
                     completion(alarmsList, nil)
                 } catch {
                     completion([], "Failed to retrieve alarms: \(error.localizedDescription)")
@@ -136,7 +136,7 @@ private extension AlarmKitBridge {
         // Get the trigger date from the schedule
         var triggerDate: Date?
         let schedule = alarm.configuration.schedule
-        
+
         // Extract date based on schedule type
         if case .fixed(let date) = schedule {
             triggerDate = date
@@ -144,22 +144,22 @@ private extension AlarmKitBridge {
             // For repeating alarms, create a date from components
             triggerDate = Calendar.current.date(from: dateComponents)
         }
-        
+
         guard let date = triggerDate else {
             return nil
         }
-        
+
         let components = Calendar.current.dateComponents([.hour, .minute], from: date)
         guard let hour = components.hour, let minute = components.minute else {
             return nil
         }
-        
+
         // Try to get label from metadata if available
-        var label: String? = nil
+        var label: String?
         if let metadata = alarm.configuration.attributes.metadata as? AlarmBridgeMetadata {
             label = metadata.label
         }
-        
+
         return [
             "id": alarm.id.uuidString,
             "hour": hour,
@@ -168,7 +168,7 @@ private extension AlarmKitBridge {
             "enabled": alarm.state == .active
         ]
     }
-    
+
     static func sanitizedLabel(_ label: String?) -> String {
         let trimmed = label?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return trimmed.isEmpty ? "Alarm" : trimmed

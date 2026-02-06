@@ -54,7 +54,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
             call.resolve([
                 "granted": false,
                 "details": ["alarmKit": false],
-                "message": "AlarmKit not available on this device/SDK",
+                "message": "AlarmKit not available on this device/SDK"
             ])
             return
         }
@@ -62,7 +62,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         AlarmKitBridge.currentAuthorizationStatus { granted, statusDescription in
             var result: [String: Any] = [
                 "granted": granted,
-                "details": ["alarmKit": granted],
+                "details": ["alarmKit": granted]
             ]
             if !granted, let statusDescription = statusDescription {
                 result["message"] = "AlarmKit authorization status: \(statusDescription)"
