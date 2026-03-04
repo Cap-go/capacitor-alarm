@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.AlarmClock;
+import android.util.Log;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -14,7 +15,8 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 @CapacitorPlugin(name = "CapgoAlarm")
 public class CapgoAlarmPlugin extends Plugin {
 
-    private final String pluginVersion = "8.0.4";
+    private final String pluginVersion = "8.0.6";
+    private static final String TAG = "CapgoAlarmPlugin";
 
     // ===== Native OS Alarm helpers (Android) =====
     @PluginMethod
@@ -82,8 +84,8 @@ public class CapgoAlarmPlugin extends Plugin {
         call.resolve(ret);
     }
 
-    @PluginMethod
-    public void requestPermissions(PluginCall call) {
+    @Override
+    protected void requestPermissions(PluginCall call) {
         boolean requestExact = call.getBoolean("exactAlarm", false);
         JSObject ret = new JSObject();
         if (requestExact && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -107,6 +109,49 @@ public class CapgoAlarmPlugin extends Plugin {
         call.resolve(ret);
     }
 
+    @Override
+    protected void checkPermissions(PluginCall call) {
+        JSObject ret = new JSObject();
+        JSObject details = new JSObject();
+        boolean granted = Build.VERSION.SDK_INT < Build.VERSION_CODES.S;
+        boolean hasDetails = false;
+        String message = null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                Context context = getContext();
+                if (context == null) {
+                    throw new IllegalStateException("Plugin context unavailable");
+                }
+                AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                boolean canExact = am != null && am.canScheduleExactAlarms();
+                details.put("exactAlarm", canExact);
+                hasDetails = true;
+                granted = canExact;
+                if (!canExact) {
+                    message = "Exact alarm permission not granted";
+                }
+            } catch (Exception e) {
+                details.put("exactAlarm", false);
+                hasDetails = true;
+                message = "Failed to query exact alarm capability";
+                Log.w(TAG, "Unable to determine exact alarm capability status", e);
+                granted = false;
+            }
+        } else {
+            message = "Exact alarm capability check requires Android S+";
+        }
+
+        ret.put("granted", granted);
+        if (hasDetails) {
+            ret.put("details", details);
+        }
+        if (message != null) {
+            ret.put("message", message);
+        }
+        call.resolve(ret);
+    }
+
     @PluginMethod
     public void getPluginVersion(final PluginCall call) {
         try {
@@ -116,5 +161,14 @@ public class CapgoAlarmPlugin extends Plugin {
         } catch (final Exception e) {
             call.reject("Could not get plugin version", e);
         }
+    }
+
+    @PluginMethod
+    public void getAlarms(PluginCall call) {
+        // Android does not provide a public API to query system alarms
+        // Each app must track its own alarms
+        JSObject ret = new JSObject();
+        ret.put("alarms", new org.json.JSONArray());
+        call.resolve(ret);
     }
 }

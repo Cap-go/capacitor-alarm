@@ -23,6 +23,17 @@ Essential for alarm clock apps, reminder apps, medication trackers, and any app 
 
 The most complete doc is available here: https://capgo.app/docs/plugins/alarm/
 
+## Compatibility
+
+| Plugin version | Capacitor compatibility | Maintained |
+| -------------- | ----------------------- | ---------- |
+| v8.\*.\*       | v8.\*.\*                | ✅          |
+| v7.\*.\*       | v7.\*.\*                | On demand   |
+| v6.\*.\*       | v6.\*.\*                | ❌          |
+| v5.\*.\*       | v5.\*.\*                | ❌          |
+
+> **Note:** The major version of this plugin follows the major version of Capacitor. Use the version that matches your Capacitor installation (e.g., plugin v8 for Capacitor 8). Only the latest major version is actively maintained.
+
 ## Install
 
 ```bash
@@ -37,6 +48,12 @@ npx cap sync
 
 Note: This plugin only exposes native alarm actions (create/open). It does not implement any custom in-app alarm scheduling/CRUD.
 
+## Permission checks
+
+Use `CapgoAlarm.checkPermissions()` to query whether AlarmKit (iOS) or the platform clock integration (Android) is ready before prompting users. The method never opens system UI and returns a `PermissionResult` with `details` describing platform-specific states (for example, `{ alarmKit: true }` on iOS or `{ exactAlarm: false }` on Android 12+).
+
+If your native runtime ships an older build of this plugin that predates the `checkPermissions` bridge, the JavaScript shim resolves with `{ granted: false, message: 'CapgoAlarm.checkPermissions is not implemented...' }` so you can gracefully fall back to feature detection or request an update.
+
 ## API
 
 <docgen-index>
@@ -45,7 +62,9 @@ Note: This plugin only exposes native alarm actions (create/open). It does not i
 * [`openAlarms()`](#openalarms)
 * [`getOSInfo()`](#getosinfo)
 * [`requestPermissions(...)`](#requestpermissions)
+* [`checkPermissions()`](#checkpermissions)
 * [`getPluginVersion()`](#getpluginversion)
+* [`getAlarms()`](#getalarms)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -126,6 +145,22 @@ On Android, may route to settings for exact alarms.
 --------------------
 
 
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionResult>
+```
+
+Check the current permission state for native alarm access without triggering UI.
+On iOS this reports AlarmKit readiness; on Android it reports capability details.
+
+**Returns:** <code>Promise&lt;<a href="#permissionresult">PermissionResult</a>&gt;</code>
+
+**Since:** 8.0.4
+
+--------------------
+
+
 ### getPluginVersion()
 
 ```typescript
@@ -137,6 +172,23 @@ Get the native Capacitor plugin version.
 **Returns:** <code>Promise&lt;{ version: string; }&gt;</code>
 
 **Since:** 1.0.0
+
+--------------------
+
+
+### getAlarms()
+
+```typescript
+getAlarms() => Promise<{ alarms: AlarmInfo[]; message?: string; }>
+```
+
+Get a list of alarms scheduled by this app.
+On iOS 26+, returns alarms from AlarmKit. On Android, this is not supported
+as the system does not provide an API to query alarms.
+
+**Returns:** <code>Promise&lt;{ alarms: AlarmInfo[]; message?: string; }&gt;</code>
+
+**Since:** 1.1.0
 
 --------------------
 
@@ -188,6 +240,20 @@ Result of a permissions request.
 | ------------- | ---------------------------------------------------------------- | ---------------------------------- |
 | **`granted`** | <code>boolean</code>                                             | Overall grant for requested scope  |
 | **`details`** | <code><a href="#record">Record</a>&lt;string, boolean&gt;</code> | Optional details by permission key |
+| **`message`** | <code>string</code>                                              | Optional human readable diagnostic |
+
+
+#### AlarmInfo
+
+Information about a scheduled alarm.
+
+| Prop          | Type                 | Description                      |
+| ------------- | -------------------- | -------------------------------- |
+| **`id`**      | <code>string</code>  | Unique identifier for the alarm  |
+| **`hour`**    | <code>number</code>  | Hour of day in 24h format (0-23) |
+| **`minute`**  | <code>number</code>  | Minute of hour (0-59)            |
+| **`label`**   | <code>string</code>  | Optional label for the alarm     |
+| **`enabled`** | <code>boolean</code> | Whether the alarm is enabled     |
 
 
 ### Type Aliases
