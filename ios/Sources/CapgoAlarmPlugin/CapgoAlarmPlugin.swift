@@ -7,7 +7,7 @@ import Capacitor
  */
 @objc(CapgoAlarmPlugin)
 public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
-    private let pluginVersion: String = "8.0.7"
+    private let pluginVersion: String = "8.0.8"
     public let identifier = "CapgoAlarmPlugin"
     public let jsName = "CapgoAlarm"
     public let pluginMethods: [CAPPluginMethod] = [
