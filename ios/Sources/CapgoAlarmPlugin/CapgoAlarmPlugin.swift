@@ -7,7 +7,7 @@ import Capacitor
  */
 @objc(CapgoAlarmPlugin)
 public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
-    private let pluginVersion: String = "8.0.6"
+    private let pluginVersion: String = "8.0.8"
     public let identifier = "CapgoAlarmPlugin"
     public let jsName = "CapgoAlarm"
     public let pluginMethods: [CAPPluginMethod] = [
@@ -59,7 +59,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
             call.resolve([
                 "granted": false,
                 "details": ["alarmKit": false],
-                "message": "AlarmKit not available on this device/SDK",
+                "message": "AlarmKit not available on this device/SDK"
             ])
             return
         }
@@ -67,7 +67,7 @@ public class CapgoAlarmPlugin: CAPPlugin, CAPBridgedPlugin {
         AlarmKitBridge.currentAuthorizationStatus { granted, statusDescription in
             var result: [String: Any] = [
                 "granted": granted,
-                "details": ["alarmKit": granted],
+                "details": ["alarmKit": granted]
             ]
             if !granted, let statusDescription = statusDescription {
                 result["message"] = "AlarmKit authorization status: \(statusDescription)"

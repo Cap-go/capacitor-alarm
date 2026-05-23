@@ -248,7 +248,7 @@ private extension AlarmKitBridge {
 
         return dict
     }
-    
+
     static func sanitizedLabel(_ label: String?) -> String {
         let trimmed = label?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         return trimmed.isEmpty ? "Alarm" : trimmed
