@@ -171,4 +171,12 @@ public class CapgoAlarmPlugin extends Plugin {
         ret.put("alarms", new org.json.JSONArray());
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void cancelAlarm(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("success", false);
+        ret.put("message", "Cancel alarm is not supported on Android");
+        call.resolve(ret);
+    }
 }
