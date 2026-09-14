@@ -27,10 +27,10 @@ const SKIP_DIRS = new Set([
 ]);
 
 /** Cap 9 Bridge APIs — not deprecated Plugin.saveCall / getSavedCall / releaseCall. */
-const IGNORE_BRIDGE_SAVED_CALL_LINE =
-  /\b[Bb]ridge\.(?:saveCall|getSavedCall|releaseCall|freeSavedCall|savedCall)\s*\(/;
+const IGNORE_BRIDGE_SAVED_CALL_SEGMENT =
+  /\b[Bb]ridge\.(?:saveCall|getSavedCall|releaseCall|freeSavedCall|savedCall)\s*\([^)]*\)/g;
 
-/** @type {{ id: string, pattern: RegExp, exts: string[], ignoreLine?: RegExp }[]} */
+/** @type {{ id: string, pattern: RegExp, exts: string[], ignoreLine?: RegExp, ignoreSegment?: RegExp }[]} */
 const RULES = [
   {
     id: "hasOption",
@@ -51,25 +51,25 @@ const RULES = [
     id: "saveCall",
     pattern: /\bsaveCall\s*\(/,
     exts: [".java", ".kt", ".swift"],
-    ignoreLine: IGNORE_BRIDGE_SAVED_CALL_LINE,
+    ignoreSegment: IGNORE_BRIDGE_SAVED_CALL_SEGMENT,
   },
   {
     id: "getSavedCall",
     pattern: /\bgetSavedCall\s*\(/,
     exts: [".java", ".kt", ".swift"],
-    ignoreLine: IGNORE_BRIDGE_SAVED_CALL_LINE,
+    ignoreSegment: IGNORE_BRIDGE_SAVED_CALL_SEGMENT,
   },
   {
     id: "freeSavedCall",
     pattern: /\bfreeSavedCall\s*\(/,
     exts: [".java", ".kt", ".swift"],
-    ignoreLine: IGNORE_BRIDGE_SAVED_CALL_LINE,
+    ignoreSegment: IGNORE_BRIDGE_SAVED_CALL_SEGMENT,
   },
   {
     id: "releaseCall",
     pattern: /\breleaseCall\s*\(/,
     exts: [".java", ".kt", ".swift"],
-    ignoreLine: IGNORE_BRIDGE_SAVED_CALL_LINE,
+    ignoreSegment: IGNORE_BRIDGE_SAVED_CALL_SEGMENT,
   },
   {
     id: "pluginRequestPermission",
@@ -194,7 +194,12 @@ function scanFile(filePath, rule) {
       continue;
     }
     if (rule.ignoreLine?.test(line)) continue;
-    if (rule.pattern.test(line)) {
+
+    let scanText = line;
+    if (rule.ignoreSegment) {
+      scanText = line.replace(rule.ignoreSegment, "");
+    }
+    if (rule.pattern.test(scanText)) {
       hits.push({ line: i + 1, text: line.trim() });
     }
   }
