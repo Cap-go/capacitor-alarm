@@ -1,6 +1,6 @@
 # @capgo/capacitor-alarm
 
-Create real alarms in the system clock from your Capacitor app: AlarmKit on iOS and the Alarm Clock intent on Android. Alarm and reminder apps get alarms that ring like the built-in clock.
+Create real alarms in the system clock from your Capacitor app: AlarmKit on iOS 26 and later and the Alarm Clock intent on Android. Alarm and reminder apps get alarms that ring like the built-in clock.
 
 <a href="https://capgo.app/?ref=plugin_alarm"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-alarm" alt="Capgo - Instant updates for Capacitor" /></a>
 
@@ -17,7 +17,7 @@ Create real alarms in the system clock from your Capacitor app: AlarmKit on iOS 
 
 ## Key features
 
-- **Native alarms**: `createAlarm()` adds an alarm through AlarmKit on iOS or the platform clock app on Android.
+- **Native alarms**: `createAlarm()` adds an alarm through AlarmKit on iOS 26 and later, or through the platform clock app on Android.
 - **Alarm list**: `openAlarms()` opens the system alarm UI where available.
 - **Manage on iOS**: `getAlarms()` and `cancelAlarm()` list and remove alarms created by your app on iOS 26 and later.
 - **Capabilities**: `getOSInfo()` reports what the current OS supports.
